@@ -22,7 +22,9 @@ This project provides a comprehensive guide and scripts to:
 - Run SQL queries on BigQuery using Python.
 - Automate Python scripts with bash for scheduled or repeated tasks.
 
-(Note that the project assumes we already have the Google Cloud API set up and can query the data collected by Analytics through BigQuery. Setting up the API can be done quite easily based on [this video](https://www.youtube.com/watch?v=HbxIXEfl-Hs&list=LL&index=21).
+(#1 Note that the project assumes we already have the Google Cloud API set up and can query the data collected by Analytics through BigQuery. Setting up the API can be done quite easily based on [this video](https://www.youtube.com/watch?v=HbxIXEfl-Hs&list=LL&index=21).)
+
+(#2 Note that the python and bash script is automatically executed using [crontab](https://linuxhandbook.com/crontab/), so the project can be applied most easily on Linux or Mac systems where crontab is available by default.)
 
 ## Prerequisites
 

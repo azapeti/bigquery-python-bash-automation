@@ -49,7 +49,7 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     ```sh
     pip install google-cloud-bigquery db-dtypes
     pip3 install db-dtypes
-    export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/service-account-file.json"
+    export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/bigquery-python-bash-automation/service-account-file.json"
     ```
     Verify the setup:
     ```sh
@@ -61,7 +61,7 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 ### Running the Python Script
 
 1. **Python Script:**
-    Save the following script as `run_bigquery.py`:
+    Save the following script as `run_bigquery.py` in the `bigquery-python-bash-automation` folder:
 
     ```python
     import os
@@ -92,7 +92,7 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     }
 
     # Directory containing the SQL query files
-    input_queries_dir = "input_bq_sql_queries"
+    input_queries_dir = "path/to/your/bigquery-python-bash-automation/input_bq_sql_queries"
 
     # Read the queries from their respective SQL files
     queries = {}
@@ -102,7 +102,7 @@ First, you need to set up Application Default Credentials (ADC) for your environ
             queries[descriptive_name] = file.read()
 
     # Directory to save TSV files
-    output_dir = "/Users/petishrooly/Documents/JDS_x_SHROOLY/biq_query_x_pythton/output_tables"
+    output_dir = "path/to/your/bigquery-python-bash-automation/output_tables"
     os.makedirs(output_dir, exist_ok=True)
 
     # Run each query and save the result
@@ -116,23 +116,23 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     ```
 
 2. **SQL Query Files:**
-    Create a directory named `input_bq_sql_queries` and add your SQL query files there. Example:
+    Create a directory named `input_bq_sql_queries` inside `bigquery-python-bash-automation` and add your SQL query files there. Example:
     - `customers_event_data.sql`
     - `visitors_who_reach_checkout.sql`
 
 ### Running the Bash Script
 
 1. **Bash Script:**
-    Save the following script as `merge_files.sh`:
+    Save the following script as `merge_files.sh` in the `bigquery-python-bash-automation` folder:
 
     ```sh
     #!/bin/bash
 
     # Set the input directories
-    input_dir1="/Users/petishrooly/Documents/JDS_x_SHROOLY/biq_query_x_pythton/output_tables"
+    input_dir1="path/to/your/bigquery-python-bash-automation/output_tables"
 
     # Set the output directory
-    output_dir="/Users/petishrooly/Documents/JDS_x_SHROOLY/biq_query_x_pythton/merged_table"
+    output_dir="path/to/your/bigquery-python-bash-automation/merged_table"
 
     # Ensure the output directory exists
     mkdir -p "$output_dir"
@@ -159,17 +159,22 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     cd "$output_dir"
     ```
 
+2. **Make the Bash Script Executable:**
+    ```sh
+    chmod +x /path/to/your/bigquery-python-bash-automation/merge_files.sh
+    ```
+
 ## Usage
 
 1. **Run the Python Script:**
     ```sh
-    python run_bigquery.py
+    python /path/to/your/bigquery-python-bash-automation/run_bigquery.py
     ```
     This will execute the queries and save the results as TSV files in the specified output directory.
 
 2. **Run the Bash Script:**
     ```sh
-    bash merge_files.sh
+    bash /path/to/your/bigquery-python-bash-automation/merge_files.sh
     ```
     This will merge the TSV files and save them in the `merged_table` directory.
 
@@ -184,8 +189,8 @@ To automate the execution of the Python and Bash scripts, you can use `crontab`.
 
 2. **Add the following lines:**
     ```sh
-    0 2 * * * /usr/bin/python /path/to/run_bigquery.py
-    0 3 * * * /bin/bash /path/to/merge_files.sh
+    0 2 * * * /usr/bin/python /path/to/your/bigquery-python-bash-automation/run_bigquery.py
+    0 3 * * * /bin/bash /path/to/your/bigquery-python-bash-automation/merge_files.sh
     ```
     This schedule runs the Python script daily at 2 AM and the Bash script daily at 3 AM. Adjust the paths and schedule as needed.
 

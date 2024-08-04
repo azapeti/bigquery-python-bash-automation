@@ -24,6 +24,9 @@ This project provides a comprehensive guide and scripts to:
 
 > **Note:** The Python and bash scripts are automatically executed using [crontab](https://linuxhandbook.com/crontab/), so the project is best applied on Linux or Mac systems where crontab is available by default.
 
+---
+This is my first hobby project after completing the [Data36](https://data36.com/) [Junior Data Scientist Academy course](https://data36.com/junior-data-scientist-akademia/) and some practice. I hope you find it useful and informative.
+
 ## Prerequisites
 
 First, you need to set up Application Default Credentials (ADC) for your environment.

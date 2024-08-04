@@ -20,7 +20,7 @@ This project provides a comprehensive guide and scripts to:
 - Run SQL queries on BigQuery using Python.
 - Automate Python scripts with bash for scheduled or repeated tasks.
 
-> **Note:** The project assumes you already have the Google Cloud API set up and can query the data collected by Analytics through BigQuery. Setting up the API can be done quite easily based on [this video](https://www.youtube.com/watch?v=HbxIXEfl-Hs&list=LL&index=21).
+> **Note:** The project assumes you already have the Google Cloud API set up and can query the data collected by Analytics through BigQuery. Setting up the API can be done quite easily based on [this video](https://www.youtube.com/watch?v=HbxIXEfl-Hs&list=LL&index=21). If you don't have a website set up with GA4, then based on [this repository](https://github.com/ngchub/Google-Cloud-Workshops/blob/main/.Exploring%20Your%20Ecommerce%20Dataset%20with%20SQL%20in%20Google%20BigQuery/Ecommerce_Practice_Notebook.md), you can easily see what a dataset collected about webshop visitors looks like and make queries. The project folders contain data queried from this demo database.
 
 > **Note:** The Python and bash scripts are automatically executed using [crontab](https://linuxhandbook.com/crontab/), so the project is best applied on Linux or Mac systems where crontab is available by default.
 
@@ -65,54 +65,55 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 
     ```python
     import os
-    from google.cloud import bigquery
-    import pandas as pd
-    from datetime import datetime
+from google.cloud import bigquery
+import pandas as pd
+from datetime import datetime
 
-    # Set up BigQuery client
-    client = bigquery.Client()
+# Set up BigQuery client
+client = bigquery.Client()
 
-    # Function to run a query and save results as TSV
-    def run_query_and_save_to_tsv(query, output_file):
-        # Execute the query
-        query_job = client.query(query)
-        results = query_job.result()
-        
-        # Convert results to a Pandas DataFrame
-        df = results.to_dataframe()
-        
-        # Save DataFrame to TSV
-        df.to_csv(output_file, sep='\t', index=False)
+# Function to run a query and save results as TSV
+def run_query_and_save_to_tsv(query, output_file):
+    # Execute the query
+    query_job = client.query(query)
+    results = query_job.result()
+    
+    # Convert results to a Pandas DataFrame
+    df = results.to_dataframe()
+    
+    # Save DataFrame to TSV
+    df.to_csv(output_file, sep='\t', index=False)
 
-    # List of query file names with descriptive names
-    query_files = {
-        "customers_event_data": "customers_event_data.sql",
-        "visitors_who_reach_checkout": "visitors_who_reach_checkout.sql"
-        # Add more descriptive query names and their corresponding SQL file names here
-    }
+# List of query file names with descriptive names
+query_files = {
+    "customers": "customers.sql",
+    "non_customers": "noncustomers.sql"
+    # Add more descriptive query names and their corresponding SQL file names here
+}
 
-    # Directory containing the SQL query files
-    input_queries_dir = "path/to/your/bigquery-python-bash-automation/input_bq_sql_queries"
+# Directory containing the SQL query files
+input_queries_dir = "input_bq_sql_queries"
 
-    # Read the queries from their respective SQL files
-    queries = {}
-    for descriptive_name, file_name in query_files.items():
-        query_file_path = os.path.join(input_queries_dir, file_name)
-        with open(query_file_path, 'r') as file:
-            queries[descriptive_name] = file.read()
+# Read the queries from their respective SQL files
+queries = {}
+for descriptive_name, file_name in query_files.items():
+    query_file_path = os.path.join(input_queries_dir, file_name)
+    with open(query_file_path, 'r') as file:
+        queries[descriptive_name] = file.read()
 
-    # Directory to save TSV files
-    output_dir = "path/to/your/bigquery-python-bash-automation/output_tables"
-    os.makedirs(output_dir, exist_ok=True)
+# Directory to save TSV files
+output_dir = "/Users/petishrooly/Documents/bigquery-python-bash-automation/output_tables"
+os.makedirs(output_dir, exist_ok=True)
 
-    # Run each query and save the result
-    for descriptive_name, query in queries.items():
-        # Get the current date and time
-        current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
-        # Construct the output file name with date and time
-        output_file = os.path.join(output_dir, f"{descriptive_name}_{current_time}.tsv")
-        run_query_and_save_to_tsv(query, output_file)
-        print(f"Saved results of '{descriptive_name}' to {output_file}")
+# Run each query and save the result
+for descriptive_name, query in queries.items():
+    # Get the current date and time
+    current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # Construct the output file name with date and time
+    output_file = os.path.join(output_dir, f"{descriptive_name}_{current_time}.tsv")
+    run_query_and_save_to_tsv(query, output_file)
+    print(f"Saved results of '{descriptive_name}' to {output_file}")
+
     ```
 
 2. **SQL Query Files:**

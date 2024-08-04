@@ -58,10 +58,19 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 
 ## Setup
 
+## Setup
+
+### Writing the SQL Code
+
+1. **SQL Query Files:**
+    Create a directory named `input_bq_sql_queries` inside `/path/to/your/bigquery-python-bash-automation` and add your SQL query files there. Example:
+    - `customers_event_data.sql`
+    - `visitors_who_reach_checkout.sql`
+
 ### Running the Python Script
 
-1. **Python Script:**
-    Save the following script as `run_bigquery.py` in the `bigquery-python-bash-automation` folder:
+2. **Python Script:**
+    Save the following script as `run_bigquery.py` in the `/path/to/your/bigquery-python-bash-automation` folder:
 
     ```python
     import os
@@ -102,7 +111,7 @@ First, you need to set up Application Default Credentials (ADC) for your environ
             queries[descriptive_name] = file.read()
     
     # Directory to save TSV files
-    output_dir = "/Users/petishrooly/Documents/bigquery-python-bash-automation/output_tables"
+    output_dir = "/path/to/your/bigquery-python-bash-automation/output_tables"
     os.makedirs(output_dir, exist_ok=True)
     
     # Run each query and save the result
@@ -116,24 +125,20 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 
     ```
 
-2. **SQL Query Files:**
-    Create a directory named `input_bq_sql_queries` inside `bigquery-python-bash-automation` and add your SQL query files there. Example:
-    - `customers_event_data.sql`
-    - `visitors_who_reach_checkout.sql`
 
 ### Running the Bash Script
 
 1. **Bash Script:**
-    Save the following script as `merge_files.sh` in the `bigquery-python-bash-automation` folder:
+    Save the following script as `merge_files.sh` in the `/path/to/your/bigquery-python-bash-automation` folder:
 
     ```sh
     #!/bin/bash
 
     # Set the input directories
-    input_dir1="path/to/your/bigquery-python-bash-automation/output_tables"
+    input_dir1="/path/to/your/bigquery-python-bash-automation/output_tables"
 
     # Set the output directory
-    output_dir="path/to/your/bigquery-python-bash-automation/merged_table"
+    output_dir="/path/to/your/bigquery-python-bash-automation/merged_table"
 
     # Ensure the output directory exists
     mkdir -p "$output_dir"

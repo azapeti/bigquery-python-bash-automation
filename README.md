@@ -1,6 +1,6 @@
 # bigquery-python-bash-automation
 
-Since we're using the free version, we can only get data from our website through the Google Analytics API for the last 60 days, I would like to demonstrate in this repository how to run BigQuery queries in Python and automate it using bash and crontab for collecting historical data.
+Since you're using the free version, you can only get data from your website through the Google Analytics API for the last 60 days. I would like to demonstrate in this repository how to run BigQuery queries in Python and automate it using bash and crontab for collecting historical data.
 
 ## Contents
 

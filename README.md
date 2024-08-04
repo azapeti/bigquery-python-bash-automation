@@ -168,7 +168,7 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 
 1. **Run the Python Script:**
     ```sh
-    python /path/to/your/bigquery-python-bash-automation/run_bigquery.py
+    python3 /path/to/your/bigquery-python-bash-automation/run_bigquery.py
     ```
     This will execute the queries and save the results as TSV files in the specified output directory.
 

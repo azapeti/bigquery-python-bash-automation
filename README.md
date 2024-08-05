@@ -18,7 +18,8 @@ This project provides a comprehensive guide and scripts to:
 
 - Connect to BigQuery from Python.
 - Run SQL queries on BigQuery using Python.
-- Automate Python scripts with bash for scheduled or repeated tasks.
+- Merge .tsv files with bash.
+- Automate Python and Bash scripts with Crontab for scheduled or repeated tasks.
 
 > **Note:** The project assumes you already have the Google Cloud API set up and can query the data collected by Analytics through BigQuery. Setting up the API can be done quite easily based on [this video](https://www.youtube.com/watch?v=HbxIXEfl-Hs&list=LL&index=21). If you don't have a website set up with GA4, then based on [this repository](https://github.com/ngchub/Google-Cloud-Workshops/blob/main/.Exploring%20Your%20Ecommerce%20Dataset%20with%20SQL%20in%20Google%20BigQuery/Ecommerce_Practice_Notebook.md), you can easily see what a dataset collected about webshop visitors looks like and make queries. The project folders contain data queried from this demo database.
 
@@ -59,7 +60,6 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     echo $GOOGLE_APPLICATION_CREDENTIALS
     ```
 
-## Setup
 
 ## Setup
 
@@ -67,8 +67,8 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 
 1. **SQL Query Files:**
     Create a directory named `input_bq_sql_queries` inside `/path/to/your/bigquery-python-bash-automation` and add your SQL query files there. Example:
-    - `customers_event_data.sql`
-    - `visitors_who_reach_checkout.sql`
+    - `customers.sql`
+    - `non_customers.sql`
 
 ### Running the Python Script
 
@@ -99,7 +99,7 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     # List of query file names with descriptive names
     query_files = {
         "customers": "customers.sql",
-        "non_customers": "noncustomers.sql"
+        "non_customers": "non_customers.sql"
         # Add more descriptive query names and their corresponding SQL file names here
     }
     
@@ -152,17 +152,17 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 
     # Append and merge customer event data files without duplicates
     cat "$input_dir1"/cu*.tsv > "$temp_file1"
-    awk -F'\t' '!seen[$0]++' "$temp_file1" > "$output_dir/customers_event_data_MERGED.tsv"
+    awk -F'\t' '!seen[$0]++' "$temp_file1" > "$output_dir/customers_MERGED.tsv"
 
     # Append and merge visitors who reach checkout files without duplicates
     cat "$input_dir1"/vi*.tsv > "$temp_file2"
-    awk -F'\t' '!seen[$0]++' "$temp_file2" > "$output_dir/visitors_who_reach_checkout_MERGED.tsv"
+    awk -F'\t' '!seen[$0]++' "$temp_file2" > "$output_dir/non_customers_MERGED.tsv"
 
     # Cleanup temporary files
     rm "$temp_file1" "$temp_file2"
 
-    echo "Appended and merged customer event data file saved to: $output_dir/customers_event_data_MERGED.tsv"
-    echo "Appended and merged visitors who reach checkout file saved to: $output_dir/visitors_who_reach_checkout_MERGED.tsv"
+    echo "Appended and merged customer event data file saved to: $output_dir/customers_MERGED.tsv"
+    echo "Appended and merged visitors who reach checkout file saved to: $output_dir/non_customers_MERGED.tsv"
 
     # Optional: Navigate to the output directory
     cd "$output_dir"

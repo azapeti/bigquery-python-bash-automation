@@ -1,6 +1,6 @@
 # bigquery-python-bash-automation
 
-Since you're using the free version, you can only get data from your website through the Google Analytics API for the last 60 days. I would like to demonstrate in this repository how to run BigQuery queries in Python and automate it using bash and crontab for collecting historical data.
+Since the free version of Google Analytics API only allows access to the last 60 days of data, this project demonstrates how to run BigQuery queries in Python and automate the process using Bash and Crontab to collect and store historical data.
 
 ## Contents
 
@@ -18,12 +18,12 @@ This project provides a comprehensive guide and scripts to:
 
 - Connect to BigQuery from Python.
 - Run SQL queries on BigQuery using Python.
-- Merge .tsv files with bash.
+- Merge .tsv files with Bash.
 - Automate Python and Bash scripts with Crontab for scheduled or repeated tasks.
 
-> **Note:** The project assumes you already have the Google Cloud API set up and can query the data collected by Analytics through BigQuery. Setting up the API can be done quite easily based on [this video](https://www.youtube.com/watch?v=HbxIXEfl-Hs&list=LL&index=21). If you don't have a website set up with GA4, then based on [this repository](https://github.com/ngchub/Google-Cloud-Workshops/blob/main/.Exploring%20Your%20Ecommerce%20Dataset%20with%20SQL%20in%20Google%20BigQuery/Ecommerce_Practice_Notebook.md), you can easily see what a dataset collected about webshop visitors looks like and make queries. The project folders contain data queried from this demo database.
+> **Note:** The project assumes you already have the Google Cloud API set up and can query the data collected by Analytics through BigQuery. Setting up the API can be done quite easily based on [this video](https://www.youtube.com/watch?v=HbxIXEfl-Hs&list=LL&index=21). If you don't have a website set up with GA4, then based on [this repository](https://github.com/ngchub/Google-Cloud-Workshops/blob/main/.Exploring%20Your%20Ecommerce%20Dataset%20with%20SQL%20in%20Google%20BigQuery/Ecommerce_Practice_Notebook.md), you can easily see what a dataset collected about webshop visitors looks like and make queries. The project folders include sample data queried from this demo database.
 
-> **Note:** The Python and bash scripts are automatically executed using [crontab](https://linuxhandbook.com/crontab/), so the project is best applied on Linux or Mac systems where crontab is available by default.
+> **Note:** The Python and Bash scripts are automatically executed using [crontab](https://linuxhandbook.com/crontab/), so the project is best applied on Linux or Mac systems where crontab is available by default.
 
 ---
 This is my first hobby project after completing the [Data36](https://data36.com/) [Junior Data Scientist Academy course](https://data36.com/junior-data-scientist-akademia/) and some practice. I hope you find it useful and informative.
@@ -50,9 +50,12 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     - Choose JSON and click Create. This will download the JSON key file to your computer.
 
 3. **Configure Your Environment:**
+    Run the following command to install the required Python libraries:
     ```sh
-    pip install google-cloud-bigquery db-dtypes
-    pip3 install db-dtypes
+    pip3 install google-cloud-bigquery db-dtypes
+    ```
+    Set the environment variable for the Google Application Credentials:
+    ```sh
     export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/bigquery-python-bash-automation/service-account-file.json"
     ```
     Verify the setup:
@@ -60,10 +63,9 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     echo $GOOGLE_APPLICATION_CREDENTIALS
     ```
 
-
 ## Setup
 
-### Writing the SQL Code
+### Creating SQL Query Files
 
 1. **SQL Query Files:**
     Create a directory named `input_bq_sql_queries` inside `/path/to/your/bigquery-python-bash-automation` and add your SQL query files there. Example:
@@ -73,7 +75,7 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 ### Running the Python Script
 
 2. **Python Script:**
-    Save the following script as `run_bigquery.py` in the `/path/to/your/bigquery-python-bash-automation` folder:
+    Save the following script as `run_bigquery.py` in the `/path/to/your/bigquery-python-bash-automation` directory:
 
     ```python
     import os
@@ -81,7 +83,7 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     import pandas as pd
     from datetime import datetime
     
-    # Set up BigQuery client
+    # Setting up the BigQuery client
     client = bigquery.Client()
     
     # Function to run a query and save results as TSV
@@ -128,14 +130,15 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 
     ```
 
-
 ### Running the Bash Script
 
 1. **Bash Script:**
-    Save the following script as `merge_files.sh` in the `/path/to/your/bigquery-python-bash-automation` folder:
+    Save the following script as `merge_files.sh` in the `/path/to/your/bigquery-python-bash-automation` directory:
 
     ```sh
     #!/bin/bash
+
+    ### Bash Script to Merge TSV Files
 
     # Set the input directories
     input_dir1="/path/to/your/bigquery-python-bash-automation/output_tables"
@@ -150,12 +153,12 @@ First, you need to set up Application Default Credentials (ADC) for your environ
     temp_file1=$(mktemp)
     temp_file2=$(mktemp)
 
-    # Append and merge customer event data files without duplicates
+    ### Append and Merge Customer Event Data Files Without Duplicates
     cat "$input_dir1"/cu*.tsv > "$temp_file1"
     awk -F'\t' '!seen[$0]++' "$temp_file1" > "$output_dir/customers_MERGED.tsv"
 
-    # Append and merge visitors who reach checkout files without duplicates
-    cat "$input_dir1"/vi*.tsv > "$temp_file2"
+    ### Append and Merge Visitors Who Reach Checkout Files Without Duplicates
+    cat "$input_dir1"/non*.tsv > "$temp_file2"
     awk -F'\t' '!seen[$0]++' "$temp_file2" > "$output_dir/non_customers_MERGED.tsv"
 
     # Cleanup temporary files
@@ -175,13 +178,15 @@ First, you need to set up Application Default Credentials (ADC) for your environ
 
 ## Usage
 
-1. **Run the Python Script:**
+### Running the Python Script
+1. Run the Python script:
     ```sh
     python3 /path/to/your/bigquery-python-bash-automation/run_bigquery.py
     ```
     This will execute the queries and save the results as TSV files in the specified output directory.
 
-2. **Run the Bash Script:**
+### Running the Bash Script
+2. Run the Bash script:
     ```sh
     bash /path/to/your/bigquery-python-bash-automation/merge_files.sh
     ```
@@ -196,7 +201,7 @@ To automate the execution of the Python and Bash scripts, you can use `crontab`.
     crontab -e
     ```
 
-2. **Add the following lines:**
+2. **Add the following lines to schedule the scripts:**
     ```sh
     0 2 * * * /usr/bin/python /path/to/your/bigquery-python-bash-automation/run_bigquery.py
     0 3 * * * /bin/bash /path/to/your/bigquery-python-bash-automation/merge_files.sh

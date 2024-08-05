@@ -22,7 +22,7 @@ cat "$input_dir1"/non*.tsv > "$temp_file2"
 awk -F'\t' '!seen[$0]++' "$temp_file2" > "$output_dir/non_customers_MERGED.tsv"
 
 # Cleanup temporary files
-rm "$temp_file1" # "$temp_file2"
+rm "$temp_file1"  "$temp_file2"
 
 echo "Appended and merged customer event data file saved to: $output_dir/customers_MERGED.tsv"
 echo "Appended and merged visitors who reach checkout file saved to: $output_dir/non_customers_MERGED.tsv"
